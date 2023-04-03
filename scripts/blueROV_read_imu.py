@@ -1,8 +1,11 @@
-from pymavlink import mavutil
+#!/usr/bin/env python3
+import pymavlink.mavutil as mavutil
+# from pymavlink import mavutil
 
 # Create the connection
 # From topside computer
-master = mavutil.mavlink_connection('udpin:0.0.0.0:14550')
+# UDPport = 14552
+master = mavutil.mavlink_connection('udpin:0.0.0.0:14552')
 
 def request_message_interval(message_id: int, frequency_hz: float):
     """
