@@ -12,7 +12,8 @@ import time
 from pymavlink import mavutil
 import threading
 from tools import *
-
+import numpy as np
+from tf.transformations import *
 import rospy
 import sensor_msgs.msg
 import subprocess
@@ -259,7 +260,7 @@ class BlueROV:
             self.pitch = msg["pitch"]
             self.yaw = msg["yaw"]
 
-            self.qx, self.qy, self.qz, self.qw = get_quaternion_from_euler(self.roll, self.pitch, self.yaw)
+            self.qx, self.qy, self.qz, self.qw = quaternion_from_euler(self.roll, self.pitch, self.yaw)
             self.ahrs_time = time.time()
 
         elif msg["mavpackettype"] == "NAMED_VALUE_FLOAT":
@@ -395,7 +396,7 @@ class BlueROV:
         imu_msg.angular_velocity.z = self.gyroz
 
         ## orientation
-        x,y,z,w = get_quaternion_from_euler(self.roll, self.pitch, self.yaw)
+        x,y,z,w = quaternion_from_euler(self.roll, self.pitch, self.yaw)
 
         imu_msg.orientation.x = x
         imu_msg.orientation.y = y
@@ -434,7 +435,7 @@ if __name__ == "__main__":
     
     ## implement test
     # port = 14000 # bluerov
-    port = 14550 # sitl
+    port = 14552 # sitl
     ROV = BlueROV(port)
     ROV.start_UDP_reader_thread()
 
