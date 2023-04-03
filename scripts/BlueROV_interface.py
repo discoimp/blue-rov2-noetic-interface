@@ -1,10 +1,4 @@
-
 #!/usr/bin/env python3
-
-"""
-Interface-object for BlueROV communication
-"""
-
 # Disable "Bare exception" warning
 # pylint: disable=W0702
 
