@@ -5,21 +5,24 @@ import rospy
 import numpy as np
 # quaternion_from_euler
 import tf.transformations as tf
-# Create the connection
-# From topside computer
-# UDPport = 14552
-master = mavutil.mavlink_connection('udpin:0.0.0.0:14550')
+# Create the connection at port:
+UDP_PORT = 14552 # 14550 for QGC, 14552 for mavros (if QGC is already using 14550)
+
+# Switch between different imu data feeds
+# RAW_IMU = mavutil.mavlink.MAVLINK_MSG_ID_RAW_IMU
+# SCALED_IMU2 = mavutil.mavlink.MAVLINK_MSG_ID_SCALED_IMU2
+# The Event camera has IMU data data as well, but it is not used here as it is (eventually) published by the camera driver as ROS messages
+
+MAVLINK_TYPE = mavutil.mavlink.MAVLINK_MSG_ID_SCALED_IMU2
+ROS_TOPIC = 'imu_pixhawk'
+NODE_NAME = 'imu_node'
+FRAME_ID = 'imu_frame'
+MSG_TYPE = Imu
+master = mavutil.mavlink_connection(f'udpin:0.0.0.0:{UDP_PORT}')
 
 def request_message_interval(message_id: int, frequency_hz: float):
-    """
-    Request MAVLink message in a desired frequency,
-    documentation for SET_MESSAGE_INTERVAL:
-        https://mavlink.io/en/messages/common.html#MAV_CMD_SET_MESSAGE_INTERVAL
-
-    Args:
-        message_id (int): MAVLink message ID
-        frequency_hz (float): Desired frequency in Hz
-    """
+    print("Requesting message interval for message ID {} at {} Hz".format(message_id, frequency_hz))
+    
     master.mav.command_long_send(
         master.target_system, master.target_component,
         mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL, 0,
@@ -30,7 +33,7 @@ def request_message_interval(message_id: int, frequency_hz: float):
     )
 
 # A function to publish IMU data
-def get_imu_pixhawk_message(msg):
+def get_imu_message(msg):
         ## acc, gyro and orientation in m/s^2, rad/s
         ## 
         
@@ -48,7 +51,7 @@ def get_imu_pixhawk_message(msg):
         
         
         imu_msg = Imu()
-        imu_msg.header.frame_id = "imu_pixhawk"
+        imu_msg.header.frame_id = FRAME_ID
         # imu_msg.header.stamp = rospy.Time.from_sec(IMU_time)
         imu_msg.header.stamp = rospy.get_rostime()
         
@@ -76,32 +79,23 @@ def get_imu_pixhawk_message(msg):
         imu_msg.orientation_covariance = not_defined
         imu_msg.angular_velocity_covariance = not_defined
         imu_msg.linear_acceleration_covariance = not_defined
+        
         imuPublisher.publish(imu_msg)
 
-request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_SCALED_IMU2, 1000) # 100 is the frequency in Hz
+request_message_interval(MAVLINK_TYPE, 100) # 100 is the frequency in Hz
 
-rospy.init_node('imu_pixhawk')  # initialize node
+rospy.init_node(NODE_NAME)  # initialize node
 
 # save the publisher in a variable
-imuPublisher = rospy.Publisher('imu_pixhawk', Imu, queue_size=1) # que_size is used to limit the number of messages to be stored if the subscriber is not receiving them fast enough
-# Request parameter
-master.mav.param_request_read_send(
-    master.target_system, master.target_component,
-    b'SCALED_IMU2',
-    -1
-)
+imuPublisher = rospy.Publisher(ROS_TOPIC, MSG_TYPE, queue_size=1) # que_size is used to limit the number of messages to be stored if the subscriber is not receiving them fast enough
 
-# Print old parameter value
-message = master.recv_match(type='PARAM_VALUE', blocking=True).to_dict()
-print('name: %s\tvalue: %d' %
-    (message['param_id'].decode("utf-8"), message['param_value']))
+print(f"Waiting for messages on {ROS_TOPIC} topic...")
 
-time.sleep(1)
-
-while True:
-    msg = master.recv_match()
+while not rospy.is_shutdown():
+    msg = master.recv_match(timeout=1)
     if not msg:
         continue
-    if msg.get_type() == 'SCALED_IMU2':
-        # get_imu_pixhawk_message(msg.to_dict())
-        print (msg)
+    print("Received message: {}".format(msg.get_type()))
+    if msg.get_type() == mavutil.mavlink.get_msg_entry(MAVLINK_TYPE).name:
+        print(f"Received message {MAVLINK_TYPE} on {ROS_TOPIC} topic")
+        get_imu_message(msg.to_dict())
