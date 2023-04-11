@@ -104,4 +104,7 @@ while True:
         continue
     if msg.get_type() == 'SCALED_IMU2':
         # get_imu_pixhawk_message(msg.to_dict())
-        print (msg)
+        imu_data = msg.to_dict()
+        print("Accel: ({:.2f}, {:.2f}, {:.2f}) m/s^2 | Gyro: ({:.2f}, {:.2f}, {:.2f}) rad/s".format(
+            imu_data["xacc"]/100, imu_data["yacc"]/100, imu_data["zacc"]/100,
+            np.math.radians(imu_data["xgyro"]), np.math.radians(imu_data["ygyro"]), np.math.radians(imu_data["zgyro"])))
