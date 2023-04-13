@@ -146,9 +146,9 @@ cameraPublisher = rospy.Publisher(ROS_TOPIC_CAMERA, MSG_TYPE_CAMERA, queue_size=
 rospy.init_node(NODE_NAME)
 
 request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_RAW_IMU, 100)
-request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_SCALED_PRESSURE2, 100)
+request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_SCALED_PRESSURE2, 30)
 request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_NAMED_VALUE_FLOAT, 1)
-request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_SYSTEM_TIME, 100)
+request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_SYSTEM_TIME, 1000)
 
 # Add your Gstreamer and camera start code here, including the camera_frame_callback registration
 # ...
