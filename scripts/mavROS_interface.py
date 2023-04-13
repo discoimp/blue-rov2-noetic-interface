@@ -119,7 +119,8 @@ def get_pressure_message(msg):
 
 def get_cam_tilt_message(msg):
     cam_tilt_msg = Float32()
-    cam_tilt_msg.data = msg["CamTilt"]
+    if msg["name"] == "CamTilt":
+        cam_tilt_msg.data = msg["value"]
 
     return {
         "timestamp": rospy.get_rostime(),
@@ -162,7 +163,7 @@ while not rospy.is_shutdown():
     msg_type = msg.get_type()
     msg_dict = msg.to_dict()
 
-    if msg_type == mavutil.mavlink.get_msg_entry(MAVLINK_TYPE).name:
+    if msg_type == "RAW_IMU":
         imu_msg = get_imu_message(msg_dict)
         imuPublisher.publish(imu_msg["msg"])
 
