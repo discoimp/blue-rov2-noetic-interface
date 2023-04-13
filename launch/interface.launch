@@ -1,0 +1,10 @@
+<launch>
+    <!-- event driver -->
+    <include file= "$(find dvs_renderer)/launch/davis_driver.launch"/>
+
+    <!-- mavros -->
+    <node name="mavros_interface"
+        pkg="rov_interface"
+        type="mavROS_interface.py" />
+
+</launch>
