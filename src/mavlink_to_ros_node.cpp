@@ -1,10 +1,6 @@
-#include <ros/ros.h>
-#include <mavros_msgs/Mavlink.h>
+// include all libraries referenced in the code
 
-#include <mavconn/interface.h>
-#include <sstream>
 
-#include <mavlink/v2.0/common/mavlink.h>
 
 
 using mavros_msgs::Mavlink;
