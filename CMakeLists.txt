@@ -25,5 +25,10 @@ include_directories(
 
 ## Add cmake target dependencies of the library
 add_executable(mavlink_to_ros_node src/mavlink_to_ros_node.cpp)
+
 target_link_libraries(mavlink_to_ros_node ${catkin_LIBRARIES})
 
+add_dependencies(mavlink_to_ros_node
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)

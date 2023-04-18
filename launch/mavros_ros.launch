@@ -1,0 +1,11 @@
+<launch>
+    
+    <!-- mavros -->
+    <node name="mavlink_all_to_ros"
+        pkg="rov_interface"
+        type="mavlink_to_ros_node" />
+
+
+
+
+</launch>
