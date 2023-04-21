@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+#
+# If we only collect certain feeds from the autopilot, we can use the following code to subscribe to the autopilot's MAVLink messages and publish them on ROS topics.
+#
+
 import rospy
 import numpy as np
 from pymavlink import mavutil
@@ -7,25 +11,10 @@ from sensor_msgs.msg import Imu, FluidPressure, Image
 from std_msgs.msg import Float32, UInt32
 import tf.transformations as tf
 
-# Your imports for working with Gstreamer and camera frames
-# ...
-
-# Your camera frame callback
-def camera_frame_callback(frame, meta_data):
-    # Process your frame and meta_data here, then create and publish an Image message
-
-    image_msg = Image()
-    image_msg.header.stamp = rospy.get_rostime()
-    # Fill other image_msg fields with frame and meta_data information
-    # ...
-    
-    cameraPublisher.publish(image_msg)
-
-# Add your Gstreamer and camera setup code here
-# ...
-
 UDP_PORT = 14552  # 14550 for QGC, 14552 for mavros (if QGC is already using 14550)
 MAVLINK_TYPE = mavutil.mavlink.MAVLINK_MSG_ID_RAW_IMU
+# add DVL message type LOCAL_POSITION_NED
+
 ROS_TOPIC_IMU = 'imu_pixhawk'
 ROS_TOPIC_PRESSURE = 'scaled_pressure2'
 ROS_TOPIC_CAM_TILT = 'named_value_float'
@@ -150,9 +139,6 @@ request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_SCALED_PRESSURE2, 30)
 request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_NAMED_VALUE_FLOAT, 1)
 request_message_interval(mavutil.mavlink.MAVLINK_MSG_ID_SYSTEM_TIME, 1000)
 
-# Add your Gstreamer and camera start code here, including the camera_frame_callback registration
-# ...
-
 print(f"Waiting for messages...")
 
 while not rospy.is_shutdown():
@@ -178,6 +164,3 @@ while not rospy.is_shutdown():
     elif msg_type == "SYSTEM_TIME":
         system_time_msg = get_system_time_message(msg_dict)
         systemTimePublisher.publish(system_time_msg["msg"])
-
-    # Add your camera frame processing and synchronization code here
-    # ...
