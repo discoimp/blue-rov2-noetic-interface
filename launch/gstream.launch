@@ -1,0 +1,12 @@
+<launch>
+  <arg name="video_topic" default="/camera/image_raw/compressed" />
+  <arg name="camera_name" default="camera" />
+
+  <node pkg="gscam" type="gscam" name="gscam_node">
+    <param name="camera_name" value="$(arg camera_name)" />
+    <param name="gscam_config" value="udpsrc port=5600 ! application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264 ! rtph264depay ! avdec_h264 ! videoconvert ! video/x-raw, format=(string)BGR ! appsink max-buffers=1 drop=true"/>
+    <param name="sync_sink" value="true" />
+    <param name="frame_id" value="/$(arg camera_name)_frame" />
+    <param name="preroll" value="true" />
+  </node>
+</launch>

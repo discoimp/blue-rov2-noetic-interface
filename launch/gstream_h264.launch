@@ -1,0 +1,12 @@
+<launch>
+  <arg name="video_topic" default="/camera/image_raw/compressed" />
+  <arg name="camera_name" default="camera" />
+
+  <node pkg="gscam" type="gscam" name="gscam_node">
+    <param name="camera_name" value="$(arg camera_name)" />
+    <param name="gscam_config" value="rosrun topic_tools transform /$(arg video_topic) sensor_msgs/CompressedImage 'gst-launch-1.0 fdsrc ! application/x-rtp,media=application ! rtpgstdepay ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=BGR ! appsink name=imagesink'" />
+    <param name="sync_sink" value="true" />
+    <param name="frame_id" value="/$(arg camera_name)_frame" />
+    <param name="preroll" value="true" />
+  </node>
+</launch>
