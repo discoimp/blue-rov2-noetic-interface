@@ -32,8 +32,13 @@ alias launch_vhuit64='sudo ~/catkin_ws/src/blue-rov2-noetic-interface/resources/
 alias launch_QGC='~/catkin_ws/src/blue-rov2-noetic-interface/resources/QGroundControl.AppImage'
 echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nlaunch_vhuit64\nlaunch_QGC"
 
+# This part only runs once to set up github for you
+
+#!/bin/bash
+
 CONFIG_TOKEN="$HOME/.git_token_config"
 CONFIG_GLOBAL="$HOME/.gitconfig"
+
 if [ ! -f "$CONFIG_GLOBAL" ]; then
   echo
   echo "Github initial setup:"
@@ -45,6 +50,7 @@ if [ ! -f "$CONFIG_GLOBAL" ]; then
 
   echo "Git global user name and email have been set."
 fi
+
 if [ ! -f "$CONFIG_TOKEN" ]; then
   echo "Leave blank if you don't wish to configure access tokens now"
   read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
@@ -59,11 +65,16 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
     touch "$CONFIG_TOKEN"
     exit 0
   fi
-  
-  REPO_URL_WITH_TOKEN="${REPO_URL/https:\/\//https:\/\/$ACCESS_TOKEN@}"
-  echo "This:"
-  echo $REPO_URL_WITH_TOKEN
-  git remote set-url origin "$REPO_URL_WITH_TOKEN"
+
+  USERNAME=$(echo "$REPO_URL" | cut -d '/' -f 4)
+  REPO_URL_WITH_TOKEN="${REPO_URL/https:\/\/$USERNAME/https:\/\/$USERNAME:$ACCESS_TOKEN@}"
+
+  git remote set-url origin "$REPO_URL_WITH_TOKEN" 2>/dev/null
+  if [ $? -ne 0 ]; then
+    echo "Error setting remote URL, please check the provided information:"
+    echo "$REPO_URL_WITH_TOKEN"
+    exit 1
+  fi
 
   touch "$CONFIG_TOKEN"
   echo "Access token has been set for the selected repository."
