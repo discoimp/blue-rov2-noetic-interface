@@ -83,4 +83,12 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
   fi
 
   git remote set-url origin "$REPO_URL_WITH_TOKEN" 2>/dev/null
+  if [ $? -ne 0 ]; then
+    echo "Error setting remote URL, please check the provided information:"
+    echo "$REPO_URL_WITH_TOKEN"
+    return 1
+  fi
 
+  touch "$CONFIG_TOKEN"
+  echo "Access token has been set for the selected repository."
+fi
