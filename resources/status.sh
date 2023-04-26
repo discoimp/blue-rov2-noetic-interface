@@ -68,8 +68,8 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
   # disassemble URL into parts to build the new variable
   BASE_URL=$(echo "$REPO_URL" | awk -F/ '{print $3}')
   USERNAME=$(echo "$REPO_URL" | awk -F/ '{print $4}')
-  REPO_NAME=$(echo "$REPO_URL" | awk -F/ '{print $5}')
-  REPO_URL_WITH_TOKEN="https://${USERNAME}:${ACCESS_TOKEN}@${BASE_URL}/$USERNAME/${REPO_NAME}"
+  REPO_NAME=$(echo "$REPO_URL" | awk -F/ '{print $5}' | sed 's/\.git$//')
+  REPO_URL_WITH_TOKEN="https://${USERNAME}:${ACCESS_TOKEN}@${BASE_URL}/${USERNAME}/${REPO_NAME}.git"
 
   # Change to the repository directory if it exists
   REPO_DIR="$HOME/catkin_ws/src/$REPO_NAME"
@@ -89,6 +89,6 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
     return 1
   fi
 
-  touch "$CONFIG_TOKEN"
+   touch "$CONFIG_TOKEN"
   echo "Access token has been set for the selected repository."
 fi
