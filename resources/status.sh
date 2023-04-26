@@ -32,14 +32,12 @@ alias launch_vhuit64='sudo ~/catkin_ws/src/blue-rov2-noetic-interface/resources/
 alias launch_QGC='~/catkin_ws/src/blue-rov2-noetic-interface/resources/QGroundControl.AppImage'
 echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nlaunch_vhuit64\nlaunch_QGC"
 
-CONFIG_FILE="$HOME/.git_token_config"
-
-if [! -f "$CONFIG_FILE" ]; then
-
-
+CONFIG_TOKEN="$HOME/.git_token_config"
+CONFIG_GLOBAL="$HOME/.gitconfig"
+if [! -f "$CONFIG_GLOBAL" ];
+then
   echo
-  echo "Github setup:"
-
+  echo "Github initial setup:"
   read -p "Enter your Git user name: " GIT_USER_NAME
   read -p "Enter your Git email: " GIT_USER_EMAIL
 
@@ -47,7 +45,8 @@ if [! -f "$CONFIG_FILE" ]; then
   git config --global user.email "$GIT_USER_EMAIL"
 
   echo "Git global user name and email have been set."
-
+if [! -f "$CONFIG_TOKEN" ]; then
+  echo "Leave blank if you don't wish to configure access tokens now"
   read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
   read -s -p "Enter your access token (leave empty to skip): " ACCESS_TOKEN
   echo
@@ -55,15 +54,17 @@ if [! -f "$CONFIG_FILE" ]; then
   if [ -z "$ACCESS_TOKEN" ]; then
     echo "No access token provided. Skipping."
     echo "To rerun delete:"
-    echo $CONFIG_FILE
+    echo $CONFIG_TOKEN
     echo "and open a new terminal session"
-    touch "$CONFIG_FILE"
+    touch "$CONFIG_TOKEN"
     exit 0
   fi
-
+  
   REPO_URL_WITH_TOKEN="${REPO_URL/https:\/\//https:\/\/$ACCESS_TOKEN@}"
+  echo "This:"
+  echo $REPO_URL_WITH_TOKEN
   git remote set-url origin "$REPO_URL_WITH_TOKEN"
 
-  touch "$CONFIG_FILE"
+  touch "$CONFIG_TOKEN"
   echo "Access token has been set for the selected repository."
 fi
