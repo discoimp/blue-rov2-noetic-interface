@@ -1,9 +1,3 @@
-CONFIG_FILE=".git_token_config"
-
-if [ ! -f "$CONFIG_FILE" ]; then
-  source git_config.sh
-fi
-
 source /opt/ros/noetic/setup.bash
 echo "ROS Noetic sourced"
 source ~/catkin_ws/devel/setup.bash
@@ -37,3 +31,40 @@ $virtualhere && printf "\e[%sm%-25s\e[0m\n" $([[ $dv_runtime = true ]] && echo "
 alias launch_vhuit64='sudo ~/catkin_ws/src/blue-rov2-noetic-interface/resources/vhuit64'
 alias launch_QGC='~/catkin_ws/src/blue-rov2-noetic-interface/resources/QGroundControl.AppImage'
 echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nlaunch_vhuit64\nlaunch_QGC"
+
+CONFIG_FILE="$HOME/.git_token_config"
+
+if [ -f "$CONFIG_FILE" ]; then
+  exit 0
+fi
+
+echo
+echo "Github setup:"
+
+read -p "Enter your Git user name: " GIT_USER_NAME
+read -p "Enter your Git email: " GIT_USER_EMAIL
+
+git config --global user.name "$GIT_USER_NAME"
+git config --global user.email "$GIT_USER_EMAIL"
+
+echo "Git global user name and email have been set."
+
+read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
+read -s -p "Enter your access token (leave empty to skip): " ACCESS_TOKEN
+echo
+
+if [ -z "$ACCESS_TOKEN" ]; then
+  echo "No access token provided. Skipping."
+  echo "To rerun delete:"
+  echo $CONFIG_FILE
+  echo "and open a new terminal session"
+  touch "$CONFIG_FILE"
+  exit 0
+fi
+
+REPO_URL_WITH_TOKEN="${REPO_URL/https:\/\//https:\/\/$ACCESS_TOKEN@}"
+git remote set-url origin "$REPO_URL_WITH_TOKEN"
+
+touch "$CONFIG_FILE"
+echo "Access token has been set for the selected repository."
+
