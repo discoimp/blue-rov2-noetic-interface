@@ -65,9 +65,12 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
     touch "$CONFIG_TOKEN"
     return 0
   fi
+  # disassemble URL into parts to build the new variable
+  BASE_URL=$(echo "$REPO_URL" | awk -F/ '{print $3}')
+  USERNAME=$(echo "$REPO_URL" | awk -F/ '{print $4}')
+  REPO_NAME=$(echo "$REPO_URL" | awk -F/ '{print $5}')
+  REPO_URL_WITH_TOKEN="https://${USERNAME}:${ACCESS_TOKEN}@${BASE_URL}/${REPO_NAME}"
 
-  USERNAME=$(echo "$REPO_URL" | cut -d '/' -f 4)
-  REPO_URL_WITH_TOKEN="${REPO_URL/https:\/\/$USERNAME/https:\/\/$USERNAME:$ACCESS_TOKEN@}"
 
   git remote set-url origin "$REPO_URL_WITH_TOKEN" 2>/dev/null
   if [ $? -ne 0 ]; then
