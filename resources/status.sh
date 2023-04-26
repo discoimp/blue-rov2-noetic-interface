@@ -34,37 +34,36 @@ echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nlaunch_vhuit64\nlaunch
 
 CONFIG_FILE="$HOME/.git_token_config"
 
-if [ -f "$CONFIG_FILE" ]; then
-  exit 0
-fi
+if [! -f "$CONFIG_FILE" ]; then
 
-echo
-echo "Github setup:"
 
-read -p "Enter your Git user name: " GIT_USER_NAME
-read -p "Enter your Git email: " GIT_USER_EMAIL
+  echo
+  echo "Github setup:"
 
-git config --global user.name "$GIT_USER_NAME"
-git config --global user.email "$GIT_USER_EMAIL"
+  read -p "Enter your Git user name: " GIT_USER_NAME
+  read -p "Enter your Git email: " GIT_USER_EMAIL
 
-echo "Git global user name and email have been set."
+  git config --global user.name "$GIT_USER_NAME"
+  git config --global user.email "$GIT_USER_EMAIL"
 
-read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
-read -s -p "Enter your access token (leave empty to skip): " ACCESS_TOKEN
-echo
+  echo "Git global user name and email have been set."
 
-if [ -z "$ACCESS_TOKEN" ]; then
-  echo "No access token provided. Skipping."
-  echo "To rerun delete:"
-  echo $CONFIG_FILE
-  echo "and open a new terminal session"
+  read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
+  read -s -p "Enter your access token (leave empty to skip): " ACCESS_TOKEN
+  echo
+
+  if [ -z "$ACCESS_TOKEN" ]; then
+    echo "No access token provided. Skipping."
+    echo "To rerun delete:"
+    echo $CONFIG_FILE
+    echo "and open a new terminal session"
+    touch "$CONFIG_FILE"
+    exit 0
+  fi
+
+  REPO_URL_WITH_TOKEN="${REPO_URL/https:\/\//https:\/\/$ACCESS_TOKEN@}"
+  git remote set-url origin "$REPO_URL_WITH_TOKEN"
+
   touch "$CONFIG_FILE"
-  exit 0
+  echo "Access token has been set for the selected repository."
 fi
-
-REPO_URL_WITH_TOKEN="${REPO_URL/https:\/\//https:\/\/$ACCESS_TOKEN@}"
-git remote set-url origin "$REPO_URL_WITH_TOKEN"
-
-touch "$CONFIG_FILE"
-echo "Access token has been set for the selected repository."
-
