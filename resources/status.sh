@@ -1,7 +1,7 @@
 source /opt/ros/noetic/setup.bash
 echo "ROS Noetic sourced"
 source ~/catkin_ws/devel/setup.bash
-echo -e "catkin_ws sourced\n"
+echo "catkin_ws sourced"
 source ~/uslam_ws/devel/setup.bash
 echo -e "uslam_ws sourced\n"
 
@@ -28,8 +28,6 @@ printf "\e[%sm%-25s\e[0m\n" $([[ $roscore = true ]] && echo "32" || echo "31") "
 $roscore && $virtualhere && printf "\e[%sm%-25s\e[0m\n" $([[ $davis_ros_driver = true ]] && echo "32" || echo "31") "Davis ROS driver"
 $virtualhere && printf "\e[%sm%-25s\e[0m\n" $([[ $dv_runtime = true ]] && echo "32" || echo "31") "DV-Runtime"
 
-alias rcd='roscd'
 alias launch_vhuit64='sudo ~/catkin_ws/src/blue-rov2-noetic-interface/resources/vhuit64'
-echo -e "vhuit64 can noe be run from anywhere with\nlaunch_vhuit64"
 alias launch_QGC='~/catkin_ws/src/blue-rov2-noetic-interface/resources/QGroundControl.AppImage'
-echo -e "QGroundControl can be run from anywhere with\nlaunch_QGC"
+echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nlaunch_vhuit64\nlaunch_QGC"
