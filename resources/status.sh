@@ -45,6 +45,7 @@ then
   git config --global user.email "$GIT_USER_EMAIL"
 
   echo "Git global user name and email have been set."
+fi
 if [! -f "$CONFIG_TOKEN" ]; then
   echo "Leave blank if you don't wish to configure access tokens now"
   read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
