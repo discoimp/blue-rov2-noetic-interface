@@ -67,21 +67,20 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
   fi
   # disassemble URL into parts to build the new variable
   BASE_URL=$(echo "$REPO_URL" | awk -F/ '{print $3}')
-  echo $BASE_URL
   USERNAME=$(echo "$REPO_URL" | awk -F/ '{print $4}')
-  echo $USERNAME
   REPO_NAME=$(echo "$REPO_URL" | awk -F/ '{print $5}')
-  echo $REPO_NAME
   REPO_URL_WITH_TOKEN="https://${USERNAME}:${ACCESS_TOKEN}@${BASE_URL}/$USERNAME/${REPO_NAME}"
 
-
-  git remote set-url origin "$REPO_URL_WITH_TOKEN" 2>/dev/null
-  if [ $? -ne 0 ]; then
-    echo "Error setting remote URL, please check the provided information:"
-    echo "$REPO_URL_WITH_TOKEN"
+  # Change to the repository directory if it exists
+  REPO_DIR="$HOME/catkin_ws/src/$REPO_NAME"
+  if [ -d "$REPO_DIR" ]; then
+    cd "$REPO_DIR"
+  else
+    echo "The repository directory $REPO_DIR does not exist. Please ensure the path is correct."
+    echo "You can manually run the following command after changing to the repository directory:"
+    echo "git remote set-url origin \"$REPO_URL_WITH_TOKEN\""
     return 1
   fi
 
-  touch "$CONFIG_TOKEN"
-  echo "Access token has been set for the selected repository."
-fi
+  git remote set-url origin "$REPO_URL_WITH_TOKEN" 2>/dev/null
+
