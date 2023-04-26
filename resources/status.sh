@@ -67,8 +67,11 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
   fi
   # disassemble URL into parts to build the new variable
   BASE_URL=$(echo "$REPO_URL" | awk -F/ '{print $3}')
+  echo $BASE_URL
   USERNAME=$(echo "$REPO_URL" | awk -F/ '{print $4}')
+  echo $USERNAME
   REPO_NAME=$(echo "$REPO_URL" | awk -F/ '{print $5}')
+  echo $REPO_NAME
   REPO_URL_WITH_TOKEN="https://${USERNAME}:${ACCESS_TOKEN}@${BASE_URL}/${REPO_NAME}"
 
 
