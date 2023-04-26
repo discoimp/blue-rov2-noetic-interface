@@ -51,3 +51,7 @@ qtcreator-*
 CATKIN_IGNORE
 .vscode/c_cpp_properties.json
 .vscode/settings.json
+
+# Downloads after cloning
+resources/vhuit64
+resources/QGroundControl.AppImage
