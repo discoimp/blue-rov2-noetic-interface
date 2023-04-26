@@ -63,7 +63,7 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
     echo $CONFIG_TOKEN
     echo "and open a new terminal session"
     touch "$CONFIG_TOKEN"
-    exit 0
+    return 0
   fi
 
   USERNAME=$(echo "$REPO_URL" | cut -d '/' -f 4)
@@ -73,7 +73,7 @@ if [ ! -f "$CONFIG_TOKEN" ]; then
   if [ $? -ne 0 ]; then
     echo "Error setting remote URL, please check the provided information:"
     echo "$REPO_URL_WITH_TOKEN"
-    exit 1
+    return 1
   fi
 
   touch "$CONFIG_TOKEN"
