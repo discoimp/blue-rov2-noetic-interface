@@ -1,3 +1,9 @@
+CONFIG_FILE=".git_token_config"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  source git_config.sh
+fi
+
 source /opt/ros/noetic/setup.bash
 echo "ROS Noetic sourced"
 source ~/catkin_ws/devel/setup.bash
