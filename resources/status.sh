@@ -34,8 +34,7 @@ echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nlaunch_vhuit64\nlaunch
 
 CONFIG_TOKEN="$HOME/.git_token_config"
 CONFIG_GLOBAL="$HOME/.gitconfig"
-if [! -f "$CONFIG_GLOBAL" ];
-then
+if [ ! -f "$CONFIG_GLOBAL" ]; then
   echo
   echo "Github initial setup:"
   read -p "Enter your Git user name: " GIT_USER_NAME
@@ -46,7 +45,7 @@ then
 
   echo "Git global user name and email have been set."
 fi
-if [! -f "$CONFIG_TOKEN" ]; then
+if [ ! -f "$CONFIG_TOKEN" ]; then
   echo "Leave blank if you don't wish to configure access tokens now"
   read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
   read -s -p "Enter your access token (leave empty to skip): " ACCESS_TOKEN
