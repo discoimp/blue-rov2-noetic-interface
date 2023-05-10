@@ -15,7 +15,7 @@ CAMERA_FPS = 30
 Gst.init(None)
 
 # Set the GStreamer pipelines for receiving the video stream
-video_gst_pipeline = "udpsrc port=5600 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! appsink name=video_sink"
+video_gst_pipeline = "udpsrc port=5601 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! appsink name=video_sink"
 
 # Create the GStreamer pipelines
 video_pipeline = Gst.parse_launch(video_gst_pipeline)

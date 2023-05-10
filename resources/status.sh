@@ -2,9 +2,9 @@ source /opt/ros/noetic/setup.bash
 echo "ROS Noetic sourced"
 source ~/catkin_ws/devel/setup.bash
 echo "catkin_ws sourced"
-source ~/uslam_ws/devel/setup.bash
-echo -e "uslam_ws sourced\n"
-
+echo "uslam_ws is not sourced, but can replace catkin_ws by running:"
+echo "source ~/uslam_ws/devel/setup.bash"
+echo
 virtualhere=false
 roscore=false
 davis_ros_driver=false
