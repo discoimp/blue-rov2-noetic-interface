@@ -104,11 +104,15 @@ def get_dvl_message(msg):
     dvl_msg.pose.position.y = msg["lat"]
     dvl_msg.pose.position.z = msg["altitude"]
 
-    dvl_msg.pose.orientation = tf.quaternion_from_euler(
+    quaternion = tf.quaternion_from_euler(
         np.math.radians(msg["roll"]),
         np.math.radians(msg["pitch"]),
         np.math.radians(msg["yaw"])
     )
+    dvl_msg.pose.orientation.x = quaternion[0]
+    dvl_msg.pose.orientation.y = quaternion[1]
+    dvl_msg.pose.orientation.z = quaternion[2]
+    dvl_msg.pose.orientation.w = quaternion[3]
     
     dvlPublisher.publish(dvl_msg)
 
