@@ -30,7 +30,7 @@ $virtualhere && printf "\e[%sm%-25s\e[0m\n" $([[ $dv_runtime = true ]] && echo "
 
 alias vhuit64_launch='sudo ~/catkin_ws/src/blue-rov2-noetic-interface/resources/vhuit64'
 alias QGC_launch='~/catkin_ws/src/blue-rov2-noetic-interface/resources/QGroundControl.AppImage'
-echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nlaunch_vhuit64\nlaunch_QGC"
+echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nvhuit64_launch\nQGC_launch"
 
 # This part only runs once to set up github for you
 
