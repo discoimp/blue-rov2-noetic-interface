@@ -28,8 +28,8 @@ printf "\e[%sm%-25s\e[0m\n" $([[ $roscore = true ]] && echo "32" || echo "31") "
 $roscore && $virtualhere && printf "\e[%sm%-25s\e[0m\n" $([[ $davis_ros_driver = true ]] && echo "32" || echo "31") "Davis ROS driver"
 $virtualhere && printf "\e[%sm%-25s\e[0m\n" $([[ $dv_runtime = true ]] && echo "32" || echo "31") "DV-Runtime"
 
-alias launch_vhuit64='sudo ~/catkin_ws/src/blue-rov2-noetic-interface/resources/vhuit64'
-alias launch_QGC='~/catkin_ws/src/blue-rov2-noetic-interface/resources/QGroundControl.AppImage'
+alias vhuit64_launch='sudo ~/catkin_ws/src/blue-rov2-noetic-interface/resources/vhuit64'
+alias QGC_launch='~/catkin_ws/src/blue-rov2-noetic-interface/resources/QGroundControl.AppImage'
 echo -e "\nAdded aliases for vhuit64 and QGroundControl:\nlaunch_vhuit64\nlaunch_QGC"
 
 # This part only runs once to set up github for you
