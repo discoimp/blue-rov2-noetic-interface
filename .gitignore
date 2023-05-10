@@ -55,3 +55,5 @@ CATKIN_IGNORE
 # Downloads after cloning
 resources/vhuit64
 resources/QGroundControl.AppImage
+scripts/.vscode/c_cpp_properties.json
+scripts/.vscode/settings.json
