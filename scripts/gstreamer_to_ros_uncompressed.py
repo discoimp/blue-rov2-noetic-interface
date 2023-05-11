@@ -19,8 +19,8 @@ CAMERA_FPS = 30
 Gst.init(None)
 
 # Set the GStreamer pipelines for receiving the video stream and metadata
-video_gst_pipeline = "udpsrc port=5600 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! video/x-raw,format=I420 ! appsink name=video_sink"
-metadata_gst_pipeline = "udpsrc port=5601 ! text/plain ! appsink name=metadata_sink"
+video_gst_pipeline = "udpsrc port=5601 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! video/x-raw,format=I420 ! appsink name=video_sink"
+metadata_gst_pipeline = "udpsrc port=5602 ! text/plain ! appsink name=metadata_sink"
 
 # Create the GStreamer pipelines
 video_pipeline = Gst.parse_launch(video_gst_pipeline)

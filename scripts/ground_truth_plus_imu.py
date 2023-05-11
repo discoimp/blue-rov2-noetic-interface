@@ -129,7 +129,7 @@ rospy.init_node(NODE_NAME)  # initialize node
 dvlPublisher = rospy.Publisher(DVL_ROS_TOPIC, DVL_MSG_TYPE, queue_size=10)
 imuPublisher = rospy.Publisher(ROS_TOPIC, MSG_TYPE, queue_size=10) 
 
-print(f"Relaying {ROS_TOPIC} topic...")
+print(f"Relaying {ROS_TOPIC} and {DVL_ROS_TOPIC} topic...")
 
 while not rospy.is_shutdown():
     msg = master.recv_match(timeout=1)
